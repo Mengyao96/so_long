@@ -17,7 +17,9 @@
 # include "minilibx_mms/mlx.h"
 
 // utility functions
+int		array_counts(char **array);
 void	free_array(char **array);
+char	**ft_add_to_array(char **arr, char *str);
 
 
 

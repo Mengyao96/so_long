@@ -12,6 +12,18 @@
 
 #include "so_long.h"
 
+int	array_counts(char **array)
+{
+	int	counts;
+
+	if (array == NULL)
+		return (0);
+	counts = 0;
+	while (array[counts])
+		counts++;
+	return (counts);
+}
+
 void	free_array(char **array)
 {
 	int	i;
@@ -25,4 +37,33 @@ void	free_array(char **array)
 		i++;
 	}
 	free(array);
+}
+
+char	**ft_add_to_array(char **arr, char *str)
+{
+	char	**new_arr;
+	int		counts;
+	int		i;
+
+	counts = 0;
+	if (arr)
+		counts = array_counts(arr);
+	new_arr = malloc(sizeof(char *) * (counts + 2));
+	if (!new_arr)
+		return (NULL);
+	i = 0;
+	while (i < counts)
+	{
+		new_arr[i] = ft_strdup(arr[i]);
+		if (!new_arr[i])
+			return (free_array(new_arr), NULL);
+		i++;
+	}
+	new_arr[i] = ft_strdup(str);
+	if (!new_arr[i])
+		return (free_array(new_arr), NULL);
+	new_arr[i + 1] = NULL;
+	if (arr)
+		free_array(arr);
+	return (new_arr);
 }
