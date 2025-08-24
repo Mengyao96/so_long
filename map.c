@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mezhang <mezhang@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: mezhang <mezhang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 14:20:30 by mezhang           #+#    #+#             */
-/*   Updated: 2025/08/22 22:41:35 by mezhang          ###   ########.fr       */
+/*   Updated: 2025/08/24 21:33:01 by mezhang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-char	**parse_map(void)
+char	**parse_map(char *map_name)
 {
 	int		fd;
 	char	**map;
 	char	*line;
 
-	fd = open("map.ber", O_RDONLY);
+	fd = open(map_name, O_RDONLY);
 	if (fd < 0)
 		return (perror("Error\n"), NULL);
 	line = ft_strtrim(get_next_line(fd), "\n");
@@ -38,7 +38,7 @@ char	**parse_map(void)
 	return (map);
 }
 
-int	map_check_wall(char **map, int r)
+static int	map_check_wall(char **map, int r)
 {
 	// int	r;
 	int	i;
@@ -53,7 +53,7 @@ int	map_check_wall(char **map, int r)
 			i = 0;
 			while (map[r][i] == '1')
 				i++;
-			if (i != ft_strlen(map[r]))
+			if (i != (int)ft_strlen(map[r]))
 				return (ft_printf("Error\nNot A Rectangular."), -1);
 		}
 		else
@@ -66,7 +66,7 @@ int	map_check_wall(char **map, int r)
 	return (1);
 }
 
-int	map_check_cep(char **map, int r)
+static int	map_check_cep(char **map, int r)
 {
 	int	i;
 	int	cep[3];
@@ -88,8 +88,9 @@ int	map_check_cep(char **map, int r)
 			i++;
 		}
 	}
-	if (map[0] < 1 || map[1] != 1 || map[2] != 1)
-		return (ft_printf("Error\nInvalid Collectible / Exit / Starting Point"));
+	if (cep[0] < 1 || cep[1] != 1 || cep[2] != 1)
+		return (ft_printf("Error\nInvalid Collectible / Exit / Starting Point"), -1);
+	return (1);
 }
 
 int	map_check(char **map)

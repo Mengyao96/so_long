@@ -1,27 +1,39 @@
-NAME = pipex
-LIBFT = libft/libft.a
+NAME = solong
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS =
+SRCS = main.c \
+	  map.c \
+	  map_utils.c \
+	  render.c \
+	  images.c \
+	  window.c
 
 OBJS = $(SRCS:.c=.o)
 
+LIBFT_PATH = libft
+MLX_PATH = minilibx_linux
+LDFLAGS = -L$(LIBFT_PATH) -lft \
+          -L$(MLX_PATH) -lmlx -lX11 -lXext -lm -lz
+
 all : $(NAME)
 
-$(NAME): $(OBJS)
-	$(MAKE) -C ./libft
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 
-# debug: $(SRC) $(LIBFT)
-# 	$(CC) -g $(SRCS) $(LIBFT) -o $(NAME)
+$(NAME): $(OBJS)
+	$(MAKE) -C $(LIBFT_PATH)
+	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $(NAME)
+
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 
 clean :
-	$(MAKE) clean -C ./libft
+	$(MAKE) clean -C $(LIBFT_PATH)
 	rm -f $(OBJS)
 
 fclean : clean
-	$(MAKE) fclean -C ./libft
+	$(MAKE) fclean -C $(LIBFT_PATH)
 	rm -f $(NAME)
 
 re : fclean all
