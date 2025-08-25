@@ -6,7 +6,7 @@
 /*   By: mezhang <mezhang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 12:51:37 by mezhang           #+#    #+#             */
-/*   Updated: 2025/08/24 22:01:34 by mezhang          ###   ########.fr       */
+/*   Updated: 2025/08/25 14:58:20 by mezhang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	load_images(t_game *game)
 	int	img_wd;
 	int	img_ht;
 
+	game->img_bg = mlx_xpm_file_to_image(game->mlx, "src_tileset/BG.xpm", 
+		&img_wd, &img_ht);
 	game->img_fl = mlx_xpm_file_to_image(game->mlx, "src_tileset/0.xpm", 
 		&img_wd, &img_ht);
 	game->img_wa = mlx_xpm_file_to_image(game->mlx, "src_tileset/1.xpm", 
@@ -27,7 +29,7 @@ int	load_images(t_game *game)
 		&img_wd, &img_ht);
 	game->img_ex = mlx_xpm_file_to_image(game->mlx, "src_tileset/E.xpm", 
 		&img_wd, &img_ht);
-	if (!game->img_fl || !game->img_wa || !game->img_pl || 
+	if (!game->img_bg || !game->img_fl || !game->img_wa || !game->img_pl || 
 		!game->img_co || !game->img_ex)
 		return (-1);
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: mezhang <mezhang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 13:58:25 by mezhang           #+#    #+#             */
-/*   Updated: 2025/08/24 22:20:25 by mezhang          ###   ########.fr       */
+/*   Updated: 2025/08/25 16:29:57 by mezhang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,8 @@ int	main(void)
 	game.map = parse_map("map.ber");
 	if (game.map == NULL)
 		return (1);
-	if (map_check(game.map) < 0)
+	if (map_check(&game) < 0)
 		return (free(game.map), 1);
-	
 	
 	game.mlx = mlx_init();
 	if (!game.mlx)
@@ -49,10 +48,10 @@ int	main(void)
 	if (load_images(&game) < 0)
 		return (free(game.map), free(game.mlx), free(game.win), 1);
 
-	render_map(&game);
+	render_game(&game);
 
-	// mlx_key_hook(game.win, handle_keypress, &game);
-	// mlx_hook(game.win, 17, 0, close_win, &game);
+	mlx_key_hook(game.win, handle_keypress, &game);
+	mlx_hook(game.win, 17, 0, close_game, &game);
 
 	mlx_loop(game.mlx);
 

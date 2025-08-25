@@ -6,7 +6,7 @@
 /*   By: mezhang <mezhang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 22:42:24 by mezhang           #+#    #+#             */
-/*   Updated: 2025/08/24 21:33:12 by mezhang          ###   ########.fr       */
+/*   Updated: 2025/08/25 14:20:13 by mezhang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,20 @@ int	get_map_width(char **map)
 }
 
 
-// int	close_win(int keycode, t_vars *vars)
-// {
-// 	mlx_destroy_window(vars->mlx, vars->win);
-// 	return (0);
-// }
+int	close_game(t_game *game)
+{
+	mlx_destroy_window(game->mlx, game->win);
+	mlx_destroy_image(game->mlx, game->img_fl);
+	mlx_destroy_image(game->mlx, game->img_wa);
+	mlx_destroy_image(game->mlx, game->img_pl);
+	mlx_destroy_image(game->mlx, game->img_co);
+	mlx_destroy_image(game->mlx, game->img_ex);
+	mlx_destroy_display(game->mlx);
+	free_array(game->map);
+	ft_printf("Game closed.\n");
+	exit(0);
+	return (0);
+}
 
 
 // int	main(void)

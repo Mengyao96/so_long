@@ -5,9 +5,10 @@ CFLAGS = -Wall -Wextra -Werror
 SRCS = main.c \
 	  map.c \
 	  map_utils.c \
+	  window.c \
 	  render.c \
 	  images.c \
-	  window.c
+	  events.c
 
 OBJS = $(SRCS:.c=.o)
 

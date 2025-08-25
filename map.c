@@ -6,7 +6,7 @@
 /*   By: mezhang <mezhang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 14:20:30 by mezhang           #+#    #+#             */
-/*   Updated: 2025/08/24 21:33:01 by mezhang          ###   ########.fr       */
+/*   Updated: 2025/08/25 17:02:48 by mezhang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,10 @@ char	**parse_map(char *map_name)
 	return (map);
 }
 
-static int	map_check_wall(char **map, int r)
+static int	check_wall(char **map, int r)
 {
-	// int	r;
 	int	i;
 
-	// r = array_counts(map);
 	if (r < 3)
 		return (ft_printf("Error\nMap Is Too Small."), -1);
 	while (--r >= 0)
@@ -66,7 +64,7 @@ static int	map_check_wall(char **map, int r)
 	return (1);
 }
 
-static int	map_check_cep(char **map, int r)
+static int	check_elements(t_game *game, int r)
 {
 	int	i;
 	int	cep[3];
@@ -77,31 +75,56 @@ static int	map_check_cep(char **map, int r)
 	while (--r >= 0)
 	{
 		i = 0;
-		while (map[r][i])
+		while (game->map[r][i])
 		{
-			if (map[r][i] == 'C')
+			if (game->map[r][i] == 'C')
 				cep[0]++;
-			if (map[r][i] == 'E')
+			if (game->map[r][i] == 'E')
 				cep[1]++;
-			if (map[r][i] == 'P')
+			if (game->map[r][i] == 'P')
 				cep[2]++;
 			i++;
 		}
 	}
 	if (cep[0] < 1 || cep[1] != 1 || cep[2] != 1)
-		return (ft_printf("Error\nInvalid Collectible / Exit / Starting Point"), -1);
+		return (ft_printf("Error\nInvalid Map"), -1);
 	return (1);
 }
 
-int	map_check(char **map)
+void	get_elements(t_game *game)
+{
+	int	r;
+	int	c;
+
+	r = 0;
+	while (game->map[r])
+	{
+		c = 0;
+		while (game->map[r][c])
+		{
+			if (game->map[r][c] == 'C')
+				game->collectable++;
+			if (game->map[r][c] == 'P')
+			{
+				game->player.x = c;
+				game->player.y = r;
+			}
+			c++;
+		}
+		r++;
+	}
+}
+
+int	map_check(t_game *game)
 {
 	int	row;
 
-	row = array_counts(map);
-	if (map_check_wall(map, row) < 0 || map_check_cep(map, row) < 0)
+	row = array_counts(game->map);
+	if (check_wall(game->map, row) < 0 || check_elements(game, row) < 0)
 		return (-1);
 	else
-		return (0);
+		get_elements(game);
+	return (0);
 }
 
 /* void	leaks(void)
@@ -118,7 +141,7 @@ int	main(void)
 	map = parse_map();
 	if (map == NULL)
 		return (1);
-	if (map_check_wall(map) < 0)
+	if (check_wall(map) < 0)
 		return (free(map), 1);
 	else
 	{
