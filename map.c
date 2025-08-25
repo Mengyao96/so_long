@@ -6,7 +6,7 @@
 /*   By: mezhang <mezhang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 14:20:30 by mezhang           #+#    #+#             */
-/*   Updated: 2025/08/25 17:02:48 by mezhang          ###   ########.fr       */
+/*   Updated: 2025/08/25 21:50:21 by mezhang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,12 @@ char	**parse_map(char *map_name)
 	while (1)
 	{
 		if (line == NULL)
-			break;
+			break ;
 		map = ft_add_to_array(map, line);
 		if (map == NULL)
 			return (free_array(map), free(line), perror("Error\n"), NULL);
 		free(line);
 		line = ft_strtrim(get_next_line(fd), "\n");
-
 	}
 	close(fd);
 	return (map);
@@ -51,14 +50,14 @@ static int	check_wall(char **map, int r)
 			i = 0;
 			while (map[r][i] == '1')
 				i++;
-			if (i != (int)ft_strlen(map[r]))
+			if (i != (int)ft_strlen(map[0]))
 				return (ft_printf("Error\nNot A Rectangular."), -1);
 		}
 		else
 		{
 			if (map[r][0] != '1' || map[r][ft_strlen(map[r]) - 1] != '1'
 				|| ft_strlen(map[r]) != ft_strlen(map[0]))
-				return (ft_printf("Error\nNot A Closed Wall."), -1);
+				return (ft_printf("Error\nNot Closed / Not Rectangular."), -1);
 		}
 	}
 	return (1);
@@ -158,4 +157,3 @@ int	main(void)
 	return (0);
 
 } */
-
