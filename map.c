@@ -6,7 +6,7 @@
 /*   By: mezhang <mezhang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 14:20:30 by mezhang           #+#    #+#             */
-/*   Updated: 2025/08/25 21:50:21 by mezhang          ###   ########.fr       */
+/*   Updated: 2025/08/26 11:47:10 by mezhang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,12 @@ static int	check_elements(t_game *game, int r)
 		{
 			if (game->map[r][i] == 'C')
 				cep[0]++;
-			if (game->map[r][i] == 'E')
+			else if (game->map[r][i] == 'E')
 				cep[1]++;
-			if (game->map[r][i] == 'P')
+			else if (game->map[r][i] == 'P')
 				cep[2]++;
+			else if (game->map[r][i] != '0' && game->map[r][i] != '1')
+				return (ft_printf("Error\nInvalid Character In Map"), -1);
 			i++;
 		}
 	}
