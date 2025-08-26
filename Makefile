@@ -1,14 +1,16 @@
 NAME = so_long
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I$(MLX_PATH)
+CFLAGS = -Wall -Wextra -Werror -I.
 
-SRCS = main.c \
+SRCS_DIR = src
+SRCS := $(addprefix $(SRCS_DIR)/, \
+	  main.c \
 	  map.c \
 	  map_utils.c \
 	  window.c \
 	  render.c \
 	  images.c \
-	  events.c
+	  events.c)
 
 OBJS = $(SRCS:.c=.o)
 
@@ -21,7 +23,7 @@ $(NAME): $(OBJS) $(LIBFT_PATH)/libft.a $(MLX_PATH)/libmlx.a
 	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_PATH) -lft -L$(MLX_PATH) -lmlx -lX11 -lXext -lm -o $(NAME)
 
 debug: $(LIBFT_PATH)/libft.a $(MLX_PATH)/libmlx.a
-	$(CC) -g -I$(MLX_PATH) $(SRCS) -L$(LIBFT_PATH) -lft -L$(MLX_PATH) -lmlx -lX11 -lXext -lm
+	$(CC) -g -I. $(SRCS) -L$(LIBFT_PATH) -lft -L$(MLX_PATH) -lmlx -lX11 -lXext -lm
 
 $(LIBFT_PATH)/libft.a:
 	$(MAKE) -C $(LIBFT_PATH)
@@ -29,7 +31,7 @@ $(LIBFT_PATH)/libft.a:
 $(MLX_PATH)/libmlx.a:
 	$(MAKE) -C $(MLX_PATH)
 
-%.o: %.c
+%.o: $(SRCS_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
