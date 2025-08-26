@@ -6,7 +6,7 @@
 /*   By: mezhang <mezhang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 22:16:42 by mezhang           #+#    #+#             */
-/*   Updated: 2025/08/25 21:52:09 by mezhang          ###   ########.fr       */
+/*   Updated: 2025/08/26 21:33:06 by mezhang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	move_player(int keycode, t_game *gm)
 	if (gm->map[gm->player.y + move.y][gm->player.x + move.x] == '1')
 		return (0);
 	gm->moves += 1;
+	if (gm->map[gm->player.y][gm->player.x] != 'E')
+		gm->map[gm->player.y][gm->player.x] = '0';
 	gm->player.x += move.x;
 	gm->player.y += move.y;
 	return (1);
@@ -47,9 +49,11 @@ void	check_collectible(t_game *gm)
 void	check_exit(t_game *gm)
 {
 	if (gm->map[gm->player.y][gm->player.x] == 'E'
-		&& gm->collected == gm->collectable)
+		&& gm->collected == gm->collectibles)
 	{
 		gm->exit_found = 1;
+		printf("collected: %d\n", gm->collected);
+		printf("total collectibles: %d\n", gm->collectibles);
 		ft_printf("You win! Total moves: %d\n", gm->moves);
 	}
 }
@@ -61,9 +65,9 @@ int	handle_keypress(int keycode, t_game *gm)
 	if (keycode == 65307)
 		close_game(gm);
 	is_moved = move_player(keycode, gm);
-	printf("Moves: %d\n", gm->moves);
 	if (is_moved)
 	{
+		ft_printf("Moves: %d\n", gm->moves);
 		check_collectible(gm);
 		render_game(gm);
 		check_exit(gm);
@@ -74,7 +78,3 @@ int	handle_keypress(int keycode, t_game *gm)
 	}
 	return (is_moved);
 }
-
-//-1 unidentified, 0 hit wall no move, 1 moved
-// ESC key, W 119 A 97 S 115 D 100 keys
-// 0 no move, 1 move

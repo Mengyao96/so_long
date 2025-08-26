@@ -20,6 +20,9 @@ all : $(NAME)
 $(NAME): $(OBJS) $(LIBFT_PATH)/libft.a $(MLX_PATH)/libmlx.a
 	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_PATH) -lft -L$(MLX_PATH) -lmlx -lX11 -lXext -lm -o $(NAME)
 
+debug: $(LIBFT_PATH)/libft.a $(MLX_PATH)/libmlx.a
+	$(CC) -g -I$(MLX_PATH) $(SRCS) -L$(LIBFT_PATH) -lft -L$(MLX_PATH) -lmlx -lX11 -lXext -lm
+
 $(LIBFT_PATH)/libft.a:
 	$(MAKE) -C $(LIBFT_PATH)
 
@@ -31,12 +34,12 @@ $(MLX_PATH)/libmlx.a:
 
 clean :
 	$(MAKE) clean -C $(LIBFT_PATH)
-	$(MAKE) clean -C $(MLX_PATH)
 	rm -f $(OBJS)
 
 fclean : clean
 	$(MAKE) fclean -C $(LIBFT_PATH)
-	$(MAKE) clean -C $(MLX_PATH)
+	rm -f $(MLX_PATH)/libmlx.a
+	rm -f $(MLX_PATH)/libmlx_Linux.a
 	rm -f $(NAME)
 
 re : fclean all

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mezhang <mezhang@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: mezhang <mezhang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:53:13 by mezhang           #+#    #+#             */
-/*   Updated: 2025/08/22 15:53:17 by mezhang          ###   ########.fr       */
+/*   Updated: 2025/08/26 21:10:16 by mezhang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,38 @@ char	**ft_add_to_array(char **arr, char *str)
 	{
 		new_arr[i] = ft_strdup(arr[i]);
 		if (!new_arr[i])
-			return (free_array(new_arr), NULL);
+			return (free_array(arr), free_array(new_arr), NULL);
 		i++;
 	}
 	new_arr[i] = ft_strdup(str);
 	if (!new_arr[i])
-		return (free_array(new_arr), NULL);
+		return (free_array(arr), free_array(new_arr), NULL);
 	new_arr[i + 1] = NULL;
 	if (arr)
 		free_array(arr);
 	return (new_arr);
+}
+
+void	get_elements(t_game *game)
+{
+	int	r;
+	int	c;
+
+	r = 0;
+	while (game->map[r])
+	{
+		c = 0;
+		while (game->map[r][c])
+		{
+			if (game->map[r][c] == 'C')
+				game->collectibles++;
+			if (game->map[r][c] == 'P')
+			{
+				game->player.x = c;
+				game->player.y = r;
+			}
+			c++;
+		}
+		r++;
+	}
 }

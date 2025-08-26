@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mezhang <mezhang@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: mezhang <mezhang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:02:40 by mezhang           #+#    #+#             */
-/*   Updated: 2025/08/22 14:14:14 by mezhang          ###   ########.fr       */
+/*   Updated: 2025/08/26 17:41:48 by mezhang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static char	*read_a_line(int fd, char *chunk)
 static char	*to_line(char *vault)
 {
 	size_t	i;
+	char	*the_line;
 
 	if (!vault || !*vault)
 		return (NULL);
@@ -50,7 +51,10 @@ static char	*to_line(char *vault)
 		i++;
 	if (vault[i] == '\n')
 		i++;
-	return (ft_substr_gnl(vault, 0, i));
+	the_line = ft_substr_gnl(vault, 0, i);
+	if (!the_line)
+		return (NULL);
+	return (the_line);
 }
 
 static void	update(char *chunk)

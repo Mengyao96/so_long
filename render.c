@@ -6,31 +6,11 @@
 /*   By: mezhang <mezhang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 16:32:25 by mezhang           #+#    #+#             */
-/*   Updated: 2025/08/25 22:25:56 by mezhang          ###   ########.fr       */
+/*   Updated: 2025/08/26 17:36:06 by mezhang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-void	render_background(t_game *gm)
-{
-	int	r;
-	int	c;
-
-	mlx_clear_window(gm->mlx, gm->win);
-	r = 0;
-	while (r < array_counts(gm->map))
-	{
-		c = 0;
-		while (c < (int)ft_strlen(gm->map[0]))
-		{
-			mlx_put_image_to_window(gm->mlx, gm->win, gm->img_bg, c * 32, r
-				* 32);
-			c++;
-		}
-		r++;
-	}
-}
 
 void	moves_win_update(t_game *gm)
 {
@@ -52,7 +32,6 @@ void	render_game(t_game *gm)
 	int	r;
 	int	c;
 
-	render_background(gm);
 	r = 0;
 	while (r < array_counts(gm->map))
 	{

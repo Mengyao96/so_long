@@ -6,11 +6,24 @@
 /*   By: mezhang <mezhang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 14:20:30 by mezhang           #+#    #+#             */
-/*   Updated: 2025/08/26 11:47:10 by mezhang          ###   ########.fr       */
+/*   Updated: 2025/08/26 21:40:47 by mezhang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+char	*get_next_trimmed_line(int fd)
+{
+	char	*tmp;
+	char	*trimmed_line;
+
+	tmp = get_next_line(fd);
+	if (!tmp)
+		return (NULL);
+	trimmed_line = ft_strtrim(tmp, "\n");
+	free(tmp);
+	return (trimmed_line);
+}
 
 char	**parse_map(char *map_name)
 {
@@ -20,8 +33,10 @@ char	**parse_map(char *map_name)
 
 	fd = open(map_name, O_RDONLY);
 	if (fd < 0)
-		return (perror("Error\n"), NULL);
-	line = ft_strtrim(get_next_line(fd), "\n");
+		return (ft_printf("Error\nCannot Open Map.\n"), NULL);
+	line = get_next_trimmed_line(fd);
+	if (!line)
+		return (close(fd), NULL);
 	map = NULL;
 	while (1)
 	{
@@ -29,9 +44,10 @@ char	**parse_map(char *map_name)
 			break ;
 		map = ft_add_to_array(map, line);
 		if (map == NULL)
-			return (free_array(map), free(line), perror("Error\n"), NULL);
+			return (free(line), close(fd), ft_printf("Error\nCannot \
+				 Add Line To Map.\n"), NULL);
 		free(line);
-		line = ft_strtrim(get_next_line(fd), "\n");
+		line = get_next_trimmed_line(fd);
 	}
 	close(fd);
 	return (map);
@@ -41,8 +57,8 @@ static int	check_wall(char **map, int r)
 {
 	int	i;
 
-	if (r < 3)
-		return (ft_printf("Error\nMap Is Too Small."), -1);
+	if (r <= 3)
+		return (ft_printf("Error\nMap Is Too Small.\n"), -1);
 	while (--r >= 0)
 	{
 		if (r == array_counts(map) - 1 || r == 0)
@@ -50,14 +66,17 @@ static int	check_wall(char **map, int r)
 			i = 0;
 			while (map[r][i] == '1')
 				i++;
+			if (ft_strlen(map[r]) != ft_strlen(map[0]))
+				return (ft_printf("Error\nNot Rectangular.\n"), -1);
 			if (i != (int)ft_strlen(map[0]))
-				return (ft_printf("Error\nNot A Rectangular."), -1);
+				return (ft_printf("Error\nNot Closed.\n"), -1);
 		}
 		else
 		{
-			if (map[r][0] != '1' || map[r][ft_strlen(map[r]) - 1] != '1'
-				|| ft_strlen(map[r]) != ft_strlen(map[0]))
-				return (ft_printf("Error\nNot Closed / Not Rectangular."), -1);
+			if (ft_strlen(map[r]) != ft_strlen(map[0]))
+				return (ft_printf("Error\nNot Rectangular.\n"), -1);
+			if (map[r][0] != '1' || map[r][ft_strlen(map[r]) - 1] != '1')
+				return (ft_printf("Error\nNot Closed.\n"), -1);
 		}
 	}
 	return (1);
@@ -83,37 +102,13 @@ static int	check_elements(t_game *game, int r)
 			else if (game->map[r][i] == 'P')
 				cep[2]++;
 			else if (game->map[r][i] != '0' && game->map[r][i] != '1')
-				return (ft_printf("Error\nInvalid Character In Map"), -1);
+				return (ft_printf("Error\nInvalid Character In Map.\n"), -1);
 			i++;
 		}
 	}
 	if (cep[0] < 1 || cep[1] != 1 || cep[2] != 1)
-		return (ft_printf("Error\nInvalid Map"), -1);
+		return (ft_printf("Error\nInvalid Number Of Elements.\n"), -1);
 	return (1);
-}
-
-void	get_elements(t_game *game)
-{
-	int	r;
-	int	c;
-
-	r = 0;
-	while (game->map[r])
-	{
-		c = 0;
-		while (game->map[r][c])
-		{
-			if (game->map[r][c] == 'C')
-				game->collectable++;
-			if (game->map[r][c] == 'P')
-			{
-				game->player.x = c;
-				game->player.y = r;
-			}
-			c++;
-		}
-		r++;
-	}
 }
 
 int	map_check(t_game *game)
@@ -124,38 +119,9 @@ int	map_check(t_game *game)
 	if (check_wall(game->map, row) < 0 || check_elements(game, row) < 0)
 		return (-1);
 	else
-		get_elements(game);
-	return (0);
-}
-
-/* void	leaks(void)
-{
-	system("leaks -q map");
-}
-
-
-int	main(void)
-{
-	char	**map;
-
-	atexit(leaks);
-	map = parse_map();
-	if (map == NULL)
-		return (1);
-	if (check_wall(map) < 0)
-		return (free(map), 1);
-	else
 	{
-		printf("Map is valid.\n");
-		int i = 0;
-		while (map[i])
-		{
-			printf("%s\n", map[i]);
-			free(map[i]);
-			i++;
-		}
-		free(map);
+		get_elements(game);
+		printf("collectables: %d\n", game->collectibles);
 	}
 	return (0);
-
-} */
+}
